@@ -1,5 +1,5 @@
 <div class="exercise__item">
-  <h2 id="exercise-1" class="exercise__item--title">Exercise 1</h2>
+  <h2 id="exercise-1" class="exercise__item--title">Exercise 1: RESTful service</h2>
 </div>
 <mat-accordion>
   <mat-expansion-panel>
@@ -9,8 +9,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <ul>
-      <li>Create an npm project</li>
-      <li>Create an express server that returns an html file</li>
+      <li>Create an express server that returns a message</li>
     </ul>
   </mat-expansion-panel>
 </mat-accordion>
@@ -28,52 +27,75 @@
     </ul>
     <app-command-line [source]="initProject"></app-command-line>
     <ul>
-      <li>Edit the <b>index.js</b> file</li>
+      <li>We will reuse the index.js from the webserver exercises, should look like this:</li>
     </ul>
     <markdown ngPreserveWhitespaces data-type="text/html">
       > index.js
       ```javascript
       const express = require('express');
       const path = require('path');
-      ```
-    </markdown>
-    <ul>
-      <li><a href="https://www.npmjs.com/package/express" class="ref-btn-link">Express</a> is an npm module, a routing framework.</li>
-      <li><a href="https://nodejs.org/api/path.html" class="ref-btn-link">Path</a> is Node's native utility to work with file and directory paths.</li>
-      <br>
-      <li>Now we init express and set the port we want our app to run in, add this to your <b>index.js</b> file:</li>
-    </ul>
-    <markdown ngPreserveWhitespaces data-type="text/html">
-      > index.js
-      ```javascript
-      let app = express();
-      let port = 3000;
-      ```
-    </markdown>
-    <ul>
-      <li>Now we will add the code to serve content, add this to your <b>index.js</b> file:</li>
-    </ul>
-    <markdown ngPreserveWhitespaces data-type="text/html">
-      > index.js
-      ```javascript
+      const app = express();
+      const port = 3000;
       app.use('/', express.static(
         path.join(__dirname, 'html')
       ));
       app.listen(port, console.log('web server listening on port '+port));
       ```
     </markdown>
+
     <ul>
-      <li>Run the server</li>
+      <li>Now remove the lines of code related to the static webserver:</li>
     </ul>
-    <app-command-line [source]="runServer"></app-command-line>
+    <markdown ngPreserveWhitespaces data-type="text/html">
+      > index.js
+      ```javascript
+      const path = require('path');
+      ```
+    </markdown>
+    <markdown ngPreserveWhitespaces data-type="text/html">
+      > index.js
+      ```javascript
+      app.use('/', express.static(
+        path.join(__dirname, 'html')
+      ));
+      ```
+    </markdown>
+
     <ul>
-      <li>Open your browser to <a href="http://localhost:3000">this page</a></li>
+      <li>Now we will create an endpoint to return data, change your <b>index.js</b> file to look like this:</li>
     </ul>
+    <markdown ngPreserveWhitespaces data-type="text/html">
+      > index.js
+      ```javascript
+      const express = require('express');
+      const app = express();
+      const port = 3000;
+      app.get('/hello', (req, res) => {{ '{' }}
+        res.send('hello world!');
+      {{ '}' }});
+      app.listen(port, console.log('web server listening on port '+port));
+      ```
+    </markdown>
+    <p>The lines that we added describe a <a href="https://en.wikipedia.org/wiki/Representational_state_transfer" >RESTful</a> endpoint:</p>
+    <ul>
+      <li>
+          <code class="codequote">app.get(</code>: Our app will listen to a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/GET">GET HTTP</a> request.
+      </li>
+      <li>
+          <code class="codequote">'/hello'</code>: It listens on the url path <a href="http://localhost:3000/hello">http://localhost:3000/hello</a>.
+      </li>
+    </ul>
+    <ul>
+      <li>Let's use Postman to hit the endpoint</li>
+    </ul>
+    <p>
+      Simply open a new postman tab and put in the request url: http://localhost:9000/hi and hit send.
+    </p>
   </mat-expansion-panel>
 </mat-accordion>
 
 <div class="exercise__item">
-  <h2 id="exercise-2" class="exercise__item--title">Exercise 2</h2>
+  <h2 id="exercise-2" class="exercise__item--title">Exercise 2: DB connection</h2>
 </div>
 <mat-accordion>
   <mat-expansion-panel>
@@ -83,8 +105,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <ul>
-      <li>Create an npm project</li>
-      <li>Create an express server that returns an html file</li>
+      <li>Create an express server that connects to MongoDB</li>
     </ul>
   </mat-expansion-panel>
 </mat-accordion>
@@ -93,55 +114,49 @@
 
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Setting your npm project
+        DB Setup
       </mat-panel-title>
     </mat-expansion-panel-header>
 
+    <p>
+      To connect to MongoDB from Node.js, we need a running MongoDb instance, there are several ways to do this, like installing MongoDB locally, or running a Docker container, but for this exercise we will use an account from <a href="http://mlab.com">mLab</a>, you can use the credentials provided or create your own account.<br>
+      We also need to install an npm package that will allow us to connect and query MongoDB.
+    </p>
     <ul>
       <li>Run the following commands</li>
     </ul>
-    <app-command-line [source]="initProject"></app-command-line>
+    <app-command-line [source]="npmInstallMongo"></app-command-line>
     <ul>
-      <li>Edit the <b>index.js</b> file</li>
+      <li>Let's connect to our database</li>
     </ul>
     <markdown ngPreserveWhitespaces data-type="text/html">
       > index.js
       ```javascript
       const express = require('express');
-      const path = require('path');
-      ```
-    </markdown>
-    <ul>
-      <li><a href="https://www.npmjs.com/package/express" class="ref-btn-link">Express</a> is an npm module, a routing framework.</li>
-      <li><a href="https://nodejs.org/api/path.html" class="ref-btn-link">Path</a> is Node's native utility to work with file and directory paths.</li>
-      <br>
-      <li>Now we init express and set the port we want our app to run in, add this to your <b>index.js</b> file:</li>
-    </ul>
-    <markdown ngPreserveWhitespaces data-type="text/html">
-      > index.js
-      ```javascript
-      let app = express();
-      let port = 3000;
-      ```
-    </markdown>
-    <ul>
-      <li>Now we will add the code to serve content, add this to your <b>index.js</b> file:</li>
-    </ul>
-    <markdown ngPreserveWhitespaces data-type="text/html">
-      > index.js
-      ```javascript
-      app.use('/', express.static(
-        path.join(__dirname, 'html')
-      ));
+      const MongoClient = require('mongodb').MongoClient;
+      const app = express();
+      const port = 3000;
+      const dbConfig = {{ '{' }}
+        url: 'mongodb+srv://academy:gr7f9IEroBGp7ySL@academycluster-sp07m.mongodb.net/test?retryWrites=true&w=majority',
+        dbName: 'nodems',
+        collections: {{ '{' }}
+          users: 'users'
+        {{ '}' }}
+      {{ '}' }};
+      app.get('/hello', (req, res) => {{ '{' }}
+        MongoClient.connect(dbConfig.url, (err, client) => {{ '{' }}
+          if (err) {{ '{' }}
+            res.send(err).status(500);
+          {{ '}' }} else {{ '{' }}
+            res.send('connected successfully to db').status(200);
+          {{ '}' }}
+          client.close();
+        {{ '}' }});
+      {{ '}' }});
       app.listen(port, console.log('web server listening on port '+port));
       ```
     </markdown>
-    <ul>
-      <li>Run the server</li>
-    </ul>
-    <app-command-line [source]="runServer"></app-command-line>
-    <ul>
-      <li>Open your browser to <a href="http://localhost:3000">this page</a></li>
-    </ul>
+
+    
   </mat-expansion-panel>
 </mat-accordion>

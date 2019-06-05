@@ -7,14 +7,16 @@ import {Component, OnInit, AfterViewInit} from '@angular/core';
 })
 export class ExercisesComponent implements OnInit, AfterViewInit {
 
-//   initProject = `
-// cd ~ && mkdir staticWs && cd ./staticWs
-// npm init -y
-// mkdir html
-// echo "Hello World" >> html/index.html
-// touch index.js
-// npm i express@4.16.3
-//   `;
+  initProject = `
+cd ~ && mkdir crudMongo && cd ./crudMongo
+npm init -y
+touch index.js
+npm i express@4.16.3
+  `;
+
+  npmInstallMongo = `
+npm i mongodb
+  `;
 
 //   runServer = `
 // node index.js
