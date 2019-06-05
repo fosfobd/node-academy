@@ -11,6 +11,7 @@ import {MarkdownModule, MarkedOptions, MarkedRenderer} from 'ngx-markdown';
 import {NpmModule} from './pages/exercises/npm/npm.module';
 import {ExpressModule} from './pages/exercises/express/express.module';
 import {WebModule} from './pages/exercises/web/web.module';
+import { CrudModule } from './pages/exercises/crud/crud.module';
 
 export function markedOptions(): MarkedOptions {
   const renderer = new MarkedRenderer();
@@ -45,6 +46,7 @@ export function markedOptions(): MarkedOptions {
     NpmModule,
     ExpressModule,
     WebModule,
+    CrudModule,
     MarkdownModule.forRoot({
       markedOptions: {
         provide: MarkedOptions,
