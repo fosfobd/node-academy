@@ -162,7 +162,7 @@
 </mat-accordion>
 
 <div class="exercise__item">
-  <h2 id="exercise-3" class="exercise__item--title">Exercise 3: Post</h2>
+  <h2 id="exercise-3" class="exercise__item--title">Exercise 3: Microservices</h2>
 </div>
 <mat-accordion>
   <mat-expansion-panel>
@@ -197,10 +197,8 @@
       const express = require('express');
       const bodyParser = require('body-parser');
       const MongoClient = require('mongodb').MongoClient;
-
       const app = express();
       const port = 9000;
-
       const dbConfig = {{ '{' }}
         url: 'mongodb+srv://academy:gr7f9IEroBGp7ySL@academycluster-sp07m.mongodb.net/test?retryWrites=true&w=majority',
         dbName: 'nodems',
@@ -208,45 +206,33 @@
           users: 'users'
         {{ '}' }}
       {{ '}' }};
-
       app.use(bodyParser.json());
       app.use(
         bodyParser.urlencoded({{ '{' }}
           extended: true
         {{ '}' }})
       );
-
       // routes
       app.post('/user', (req, res) => {{ '{' }}
         MongoClient.connect(dbConfig.url, (err, client) => {{ '{' }}
           if (err) {{ '{' }}
-
             res.send(err).status(500);
-
           {{ '}' }} else {{ '{' }}
-
             console.log('connected successfully to db');
-            
             const db = client.db(dbConfig.dbName);
             const coll = db.collection(dbConfig.collections.users);
             coll.insertOne(req.body);
-
             res.send('User was created').status(200);
-
           {{ '}' }}
           client.close();
         {{ '}' }});
       {{ '}' }});
-
       app.get('/user', (req, res) => {{ '{' }}
         const userid = req.query.id;
         MongoClient.connect(dbConfig.url, (err, client) => {{ '{' }}
           if (err) {{ '{' }}
-
             res.send(err).status(500);
-
           {{ '}' }} else {{ '{' }}
-
             const db = client.db(dbConfig.dbName);
             const coll = db.collection(dbConfig.collections.users);
             coll.find({{ '{' }} userid: userid {{ '}' }}).toArray((err, response) => {{ '{' }}
@@ -256,53 +242,41 @@
                 res.send(err).status(500);
               {{ '}' }}
             {{ '}' }});
-
           {{ '}' }}
           client.close();
         {{ '}' }});
       {{ '}' }});
-
       app.put('/user', (req, res) => {{ '{' }}
         const newDocument = req.body;
         MongoClient.connect(dbConfig.url, (err, client) => {{ '{' }}
           if (err) {{ '{' }}
-
             res.send(err).status(500);
-
           {{ '}' }} else {{ '{' }}
-            
             const db = client.db(dbConfig.dbName);
             const coll = db.collection(dbConfig.collections.users);
             coll.update({{ '{' }} userid: newDocument.userid {{ '}' }}, newDocument, {{ '{' }}
               upsert: true
             {{ '}' }});
             res.send('document was updated successfully');
-
           {{ '}' }}
           client.close();
         {{ '}' }});
       {{ '}' }});
-
       app.delete('/user', (req, res) => {{ '{' }}
         const userid = req.query.id;
         MongoClient.connect(dbConfig.url, (err, client) => {{ '{' }}
           if (err) {{ '{' }}
-
             res.send(err).status(500);
-
           {{ '}' }} else {{ '{' }}
-
             const db = client.db(dbConfig.dbName);
             const coll = db.collection(dbConfig.collections.users);
             console.log(newDocument);
             coll.remove({{ '{' }} userid: userid {{ '}' }}, {{ '{' }} justOne: false });
             res.send('document was deleted successfully').status(200);
-
           {{ '}' }}
           client.close();
         {{ '}' }});
       {{ '}' }});
-
       app.listen(port, () => {{ '{' }}
         console.log('ms server listening on port ' + port);
       {{ '}' }});
